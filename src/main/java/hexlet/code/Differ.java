@@ -3,7 +3,7 @@ package hexlet.code;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
+import java.util.*;
 
 public class Differ {
 
@@ -26,31 +26,54 @@ public class Differ {
         Map<String, Object> dataFile1 = getData(contentFile1);
         Map<String, Object> dataFile2 = getData(contentFile2);
 
+        Map<String, Object> resultData = new TreeMap<>(dataFile1);
+        resultData.putAll(dataFile2);
+
         StringBuilder diffStringBuilder = new StringBuilder("{");
-        for (Map.Entry<String, Object> entry : dataFile1.entrySet()) {
+        for (Map.Entry<String, Object> entry : resultData.entrySet()) {
             diffStringBuilder.append("\n\t");
-            if (dataFile2.get(entry.getKey()) != null) {
-                if (dataFile2.get(entry.getKey()).equals(entry.getValue())){ // Значения полностью эквивалентны
+
+            String key = entry.getKey();
+            Object value1 = dataFile1.get(key);
+            Object value2 = dataFile2.get(key);
+
+            if (value1 != null) {
+                if (value1.equals(value2)) { // Эквивалентны
                     diffStringBuilder
                             .append(COMPARE_SYMBOLS[INDEX_SPACE])
-                            .append(entry.getKey())
+                            .append(key)
                             .append(": ")
-                            .append(entry.getValue());
-                } else { // Значение изменилось во втором файле
-                    diffStringBuilder
-                            .append(COMPARE_SYMBOLS[INDEX_MINUS])
-                            .append(entry.getKey())
-                            .append(": ")
-                            .append(entry.getValue())
-                            .append("\n\t");
-                    // TODO: 04.06.2022 Доделать
+                            .append(value1);
+                } else {
+                    if (value2 != null) { // Изменилось во 2 файле
+                        diffStringBuilder
+                                .append(COMPARE_SYMBOLS[INDEX_MINUS])
+                                .append(key)
+                                .append(": ")
+                                .append(value1)
+                                .append("\n\t")
+                                .append(COMPARE_SYMBOLS[INDEX_PLUS])
+                                .append(key)
+                                .append(": ")
+                                .append(value2);
+                    } else {            // Удалено во 2 файле
+                        diffStringBuilder
+                                .append(COMPARE_SYMBOLS[INDEX_MINUS])
+                                .append(key)
+                                .append(": ")
+                                .append(value1);
+                    }
                 }
-            } else { // Значение не найдено во втором файле
-
+            } else {
+                diffStringBuilder
+                        .append(COMPARE_SYMBOLS[INDEX_PLUS])
+                        .append(key)
+                        .append(": ")
+                        .append(value2);
             }
 
         }
-        diffStringBuilder.append("}");
+        diffStringBuilder.append("\n}");
 
         return diffStringBuilder.toString();
     }
