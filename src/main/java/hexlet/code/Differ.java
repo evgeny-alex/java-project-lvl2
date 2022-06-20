@@ -3,7 +3,8 @@ package hexlet.code;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Differ {
 
@@ -45,7 +46,7 @@ public class Differ {
                             .append(": ")
                             .append(value1);
                 } else {
-                    if (value2 != null) { // Изменилось во 2 файле
+                    if (value2 != null) { // изменилось во 2 файле
                         diffStringBuilder
                                 .append(COMPARE_SYMBOLS[INDEX_MINUS])
                                 .append(key)
