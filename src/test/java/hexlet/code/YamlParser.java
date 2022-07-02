@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class JsonParser {
+public class YamlParser {
 
-    private final String filePath1 = "src/test/resources/file1_2.json";
+    private final String filePath1 = "src/test/resources/file1.yml";
 
-    private final String filePath2 = "src/test/resources/file2_2.json";
+    private final String filePath2 = "src/test/resources/file2.yml";
 
-    private final String diffFilePath = "src/test/resources/diff2";
+    private final String diffFilePath = "src/test/resources/diff";
 
     @Test
     public void testJsonParser() throws Exception {
