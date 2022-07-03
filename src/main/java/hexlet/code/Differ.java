@@ -1,23 +1,17 @@
 package hexlet.code;
 
+import hexlet.code.formatters.Formatter;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
 public class Differ {
-
-    private static final char[] COMPARE_SYMBOLS = {'+', '-', ' '};
-
-    private static final int INDEX_PLUS = 0;
-
-    private static final int INDEX_MINUS = 1;
-
-    private static final int INDEX_SPACE = 2;
-
 
     public static Map<String, Object> getData(String content, String extensionType) throws Exception {
         return Parser.parse(content, extensionType);
@@ -33,57 +27,39 @@ public class Differ {
         Map<String, Object> resultData = new TreeMap<>(dataFile1);
         resultData.putAll(dataFile2);
 
-        StringBuilder diffStringBuilder = new StringBuilder("{");
-        for (Map.Entry<String, Object> entry : resultData.entrySet()) {
-            diffStringBuilder.append("\n\t");
+        Formatter formatter = Formatter.createFormatter(formatType);
 
-            String key = entry.getKey();
+        StringBuilder diffStringBuilder = new StringBuilder(formatter.startString());
+
+        Iterator<Map.Entry<String, Object>> it = resultData.entrySet().iterator();
+        while (it.hasNext()) {
+            String key = it.next().getKey();
             Object value1 = dataFile1.get(key);
             Object value2 = dataFile2.get(key);
 
+            String currentString;
+
             if (dataFile1.containsKey(key)) {
-                if (Objects.equals(value1, value2)) { // Эквивалентны
-                    diffStringBuilder
-                            .append(COMPARE_SYMBOLS[INDEX_SPACE])
-                            .append(" ")
-                            .append(key)
-                            .append(": ")
-                            .append(value1);
+                if (Objects.equals(value1, value2)) {   // Эквивалентны
+                    currentString = formatter.equalsValue(key, value1);
                 } else {
-                    if (dataFile2.containsKey(key)) { // изменилось во 2 файле
-                        diffStringBuilder
-                                .append(COMPARE_SYMBOLS[INDEX_MINUS])
-                                .append(" ")
-                                .append(key)
-                                .append(": ")
-                                .append(value1)
-                                .append("\n\t")
-                                .append(COMPARE_SYMBOLS[INDEX_PLUS])
-                                .append(" ")
-                                .append(key)
-                                .append(": ")
-                                .append(value2);
-                    } else {            // Удалено во 2 файле
-                        diffStringBuilder
-                                .append(COMPARE_SYMBOLS[INDEX_MINUS])
-                                .append(" ")
-                                .append(key)
-                                .append(": ")
-                                .append(value1);
+                    if (dataFile2.containsKey(key)) {   // Изменилось во 2 файле
+                        currentString = formatter.changedValue(key, value1, value2);
+                    } else {                            // Удалено во 2 файле
+                        currentString = formatter.deletedValue(key, value1);
                     }
                 }
-            } else {
-                diffStringBuilder
-                        .append(COMPARE_SYMBOLS[INDEX_PLUS])
-                        .append(" ")
-                        .append(key)
-                        .append(": ")
-                        .append(value2);
+            } else {                                    // Добавлено значение во 2 файле
+                currentString = formatter.addedValue(key, value2);
             }
-
+            if (StringUtils.isNotEmpty(currentString)) {
+                if (it.hasNext()) {
+                    diffStringBuilder.append(currentString).append(formatter.newLineString());
+                } else {
+                    diffStringBuilder.append(currentString).append(formatter.endString());
+                }
+            }
         }
-        diffStringBuilder.append("\n}");
-
         return diffStringBuilder.toString();
     }
 }
