@@ -29,37 +29,25 @@ public class Differ {
 
         Formatter formatter = Formatter.createFormatter(formatType);
 
-        StringBuilder diffStringBuilder = new StringBuilder(formatter.startString());
-
-        Iterator<Map.Entry<String, Object>> it = resultData.entrySet().iterator();
-        while (it.hasNext()) {
-            String key = it.next().getKey();
+        for (Map.Entry<String, Object> stringObjectEntry : resultData.entrySet()) {
+            String key = stringObjectEntry.getKey();
             Object value1 = dataFile1.get(key);
             Object value2 = dataFile2.get(key);
 
-            String currentString;
-
             if (dataFile1.containsKey(key)) {
                 if (Objects.equals(value1, value2)) {   // Эквивалентны
-                    currentString = formatter.equalsValue(key, value1);
+                    formatter.fillEqualsValue(key, value1);
                 } else {
                     if (dataFile2.containsKey(key)) {   // Изменилось во 2 файле
-                        currentString = formatter.changedValue(key, value1, value2);
+                        formatter.fillChangedValue(key, value1, value2);
                     } else {                            // Удалено во 2 файле
-                        currentString = formatter.deletedValue(key, value1);
+                        formatter.fillDeletedValue(key, value1);
                     }
                 }
             } else {                                    // Добавлено значение во 2 файле
-                currentString = formatter.addedValue(key, value2);
-            }
-            if (StringUtils.isNotEmpty(currentString)) {
-                if (it.hasNext()) {
-                    diffStringBuilder.append(currentString).append(formatter.newLineString());
-                } else {
-                    diffStringBuilder.append(currentString).append(formatter.endString());
-                }
+                formatter.fillAddedValue(key, value2);
             }
         }
-        return diffStringBuilder.toString();
+        return formatter.getDiffString();
     }
 }
