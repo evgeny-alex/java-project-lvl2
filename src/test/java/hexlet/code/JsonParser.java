@@ -24,11 +24,12 @@ public class JsonParser {
     }
 
     @Test
-        public void testJsonParserPlain() throws Exception {
-            String diffString = Differ.generate(filePath1, filePath2, "plain");
-            String diffStringFromFile = Files.readString(Path.of(diffFilePath2));
-            Assertions.assertEquals(diffString, diffStringFromFile);
+    public void testJsonParserPlain() throws Exception {
+        String diffString = Differ.generate(filePath1, filePath2, "plain");
+        String diffStringFromFile = Files.readString(Path.of(diffFilePath2));
+        Assertions.assertEquals(diffString, diffStringFromFile);
     }
+
     @Test
     public void testJsonParserJsonFormatter() throws Exception {
         String diffString = Differ.generate(filePath1, filePath2, "json");
