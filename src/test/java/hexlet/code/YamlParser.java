@@ -16,7 +16,7 @@ public class YamlParser {
 
     @Test
     public void testJsonParser() throws Exception {
-        String diffString = Differ.generate(filePath1, filePath2, "text");
+        String diffString = Differ.generate(filePath1, filePath2, "stylish");
         String diffStringFromFile = Files.readString(Path.of(diffFilePath));
 
         Assertions.assertEquals(diffString, diffStringFromFile);

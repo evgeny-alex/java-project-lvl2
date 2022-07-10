@@ -16,6 +16,8 @@ public class JsonParser {
 
     private final String diffFilePath2 = "src/test/resources/diff2";
 
+    private final String diffFilePath1 = "src/test/resources/diff1";
+
     @Test
     public void testJsonParserStylish() throws Exception {
         String diffString = Differ.generate(filePath1, filePath2, "stylish");
@@ -33,7 +35,7 @@ public class JsonParser {
     @Test
     public void testJsonParserJsonFormatter() throws Exception {
         String diffString = Differ.generate(filePath1, filePath2, "json");
-        String diffStringFromFile = Files.readString(Path.of(diffFilePath2));
+        String diffStringFromFile = Files.readString(Path.of(diffFilePath1));
         Assertions.assertEquals(diffString, diffStringFromFile);
     }
 
