@@ -1,6 +1,6 @@
 package hexlet.code.formatters;
 
-public class StylishFormatter extends Formatter {
+public final class StylishFormatter extends Formatter {
 
     private StringBuilder stringBuilder;
 

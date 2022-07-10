@@ -15,12 +15,18 @@ public class Parser {
 
     @SuppressWarnings("unchecked")
     public static Map<String, Object> parse(String content, String extensionType) throws JsonProcessingException {
-        Map<String, Object> resultMap;
+        return getMapperByExtension(extensionType).readValue(content, Map.class);
+    }
+
+    private static ObjectMapper getMapperByExtension(String extensionType) {
         switch (extensionType) {
-            case EXTENSION_JSON -> resultMap = new ObjectMapper(new JsonFactory()).readValue(content, Map.class);
-            case EXTENSION_YML -> resultMap = new ObjectMapper(new YAMLFactory()).readValue(content, Map.class);
+            case EXTENSION_JSON -> {
+                return new ObjectMapper(new JsonFactory());
+            }
+            case EXTENSION_YML -> {
+                return new ObjectMapper(new YAMLFactory());
+            }
             default -> throw new RuntimeException("Для расширения файла - '" + extensionType + "' не задан парсер.");
         }
-        return resultMap;
     }
 }

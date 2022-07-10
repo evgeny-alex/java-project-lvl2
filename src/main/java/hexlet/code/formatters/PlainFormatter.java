@@ -3,7 +3,7 @@ package hexlet.code.formatters;
 import java.util.List;
 import java.util.Map;
 
-public class PlainFormatter extends Formatter {
+public final class PlainFormatter extends Formatter {
 
     private StringBuilder stringBuilder;
 

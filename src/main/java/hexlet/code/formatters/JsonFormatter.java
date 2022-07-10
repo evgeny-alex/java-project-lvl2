@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class JsonFormatter extends Formatter {
+public final class JsonFormatter extends Formatter {
 
     private List<Map<String, Object>> diffList;
 
