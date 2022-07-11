@@ -15,6 +15,10 @@ public class Differ {
         return Parser.parse(content, extensionType);
     }
 
+    public static String generate(String filePath1, String filePath2) throws Exception {
+        return generate(filePath1, filePath2, "stylish");
+    }
+
     public static String generate(String filePath1, String filePath2, String formatType) throws Exception {
         String contentFile1 = Files.readString(Path.of(filePath1));
         String contentFile2 = Files.readString(Path.of(filePath2));
