@@ -14,7 +14,7 @@ public final class StylishFormatter extends Formatter {
 
     public StylishFormatter() {
         stringBuilder = new StringBuilder();
-        stringBuilder.append("{\n\t");
+        stringBuilder.append("{\n\t\t");
     }
 
     @Override
@@ -25,7 +25,7 @@ public final class StylishFormatter extends Formatter {
                 .append(key)
                 .append(": ")
                 .append(value)
-                .append("\n\t");
+                .append("\n\t\t");
     }
 
     @Override
@@ -36,13 +36,13 @@ public final class StylishFormatter extends Formatter {
                 .append(key)
                 .append(": ")
                 .append(value1)
-                .append("\n\t")
+                .append("\n\t\t")
                 .append(COMPARE_SYMBOLS[INDEX_PLUS])
                 .append(" ")
                 .append(key)
                 .append(": ")
                 .append(value2)
-                .append("\n\t");
+                .append("\n\t\t");
     }
 
     @Override
@@ -53,7 +53,7 @@ public final class StylishFormatter extends Formatter {
                 .append(key)
                 .append(": ")
                 .append(value)
-                .append("\n\t");
+                .append("\n\t\t");
     }
 
     @Override
@@ -64,12 +64,12 @@ public final class StylishFormatter extends Formatter {
                 .append(key)
                 .append(": ")
                 .append(value)
-                .append("\n\t");
+                .append("\n\t\t");
     }
 
     @Override
     public String getDiffString() {
-        stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         stringBuilder.append("}");
         return stringBuilder.toString();
     }
