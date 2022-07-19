@@ -11,10 +11,6 @@ import java.util.TreeMap;
 
 public class Differ {
 
-    public static Map<String, Object> getData(String content, String extensionType) throws Exception {
-        return Parser.parse(content, extensionType);
-    }
-
     public static String generate(String filePath1, String filePath2) throws Exception {
         return generate(filePath1, filePath2, "stylish");
     }
@@ -23,13 +19,15 @@ public class Differ {
         String contentFile1 = Files.readString(Path.of(filePath1));
         String contentFile2 = Files.readString(Path.of(filePath2));
 
-        Map<String, Object> dataFile1 = getData(contentFile1, FilenameUtils.getExtension(filePath1));
-        Map<String, Object> dataFile2 = getData(contentFile2,  FilenameUtils.getExtension(filePath2));
+        Map<String, Object> dataFile1 = Parser.parse(contentFile1, FilenameUtils.getExtension(filePath1));
+        Map<String, Object> dataFile2 = Parser.parse(contentFile2,  FilenameUtils.getExtension(filePath2));
 
         Map<String, Object> resultData = new TreeMap<>(dataFile1);
         resultData.putAll(dataFile2);
 
         Formatter formatter = Formatter.createFormatter(formatType);
+
+        // TODO: 19.07.2022 Сначала заполняем внутрнее представление, потом форматируем
 
         for (Map.Entry<String, Object> stringObjectEntry : resultData.entrySet()) {
             String key = stringObjectEntry.getKey();
