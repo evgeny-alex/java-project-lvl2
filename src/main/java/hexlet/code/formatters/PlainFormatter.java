@@ -11,17 +11,11 @@ public final class PlainFormatter extends Formatter {
             String key = (String) keyMap.get("key");
             String type = (String) keyMap.get("type");
 
-            Object value;
+            String value;
 
             switch (type) {
                 case "added" -> {
-                    value = keyMap.get("value");
-                    if (value instanceof String) {
-                        value = "'" + value + "'";
-                    }
-                    if (value instanceof Map || value instanceof List) {
-                        value = "[complex value]";
-                    }
+                    value = getValueAsString(keyMap.get("value"));
                     stringBuilder
                             .append("Property '")
                             .append(key)
@@ -37,20 +31,9 @@ public final class PlainFormatter extends Formatter {
                             .append("\n");
                 }
                 case "changed" -> {
-                    Object value1 = keyMap.get("value1");
-                    Object value2 = keyMap.get("value2");
-                    if (value1 instanceof String) {
-                        value1 = "'" + value1 + "'";
-                    }
-                    if (value2 instanceof String) {
-                        value2 = "'" + value2 + "'";
-                    }
-                    if (value1 instanceof Map || value1 instanceof List) {
-                        value1 = "[complex value]";
-                    }
-                    if (value2 instanceof Map || value2 instanceof List) {
-                        value2 = "[complex value]";
-                    }
+                    Object value1 = getValueAsString(keyMap.get("value1"));
+                    Object value2 = getValueAsString(keyMap.get("value2"));
+
                     stringBuilder
                             .append("Property '")
                             .append(key)
@@ -69,5 +52,18 @@ public final class PlainFormatter extends Formatter {
 
         stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
         return stringBuilder.toString();
+    }
+
+    private static String getValueAsString(Object value) {
+        if (value == null) {
+            return "null";
+        }
+        if (value instanceof String) {
+            return "'" + value + "'";
+        }
+        if (value instanceof Map || value instanceof List) {
+            return "[complex value]";
+        }
+        return value.toString();
     }
 }
